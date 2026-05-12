@@ -73,10 +73,10 @@ export default function Work({ lang }: WorkGridProps) {
         <div className="grid grid-cols-1 gap-y-12 sm:gap-y-16 lg:grid-cols-2 lg:gap-x-10 lg:gap-y-20">
           {projects.map((project) => (
             <Link
-              key={project.id}
-              href={`/projects/${project.id}`}
-              className="group block"
-            >
+  key={project.id}
+  href={project.id === 1 ? "/details" : "#"}
+  className="group block"
+>
               <div>
                 <div className="h-[220px] overflow-hidden bg-gray-800 sm:h-[300px] md:h-[360px] lg:h-[330px] xl:h-[380px]">
                   <img
