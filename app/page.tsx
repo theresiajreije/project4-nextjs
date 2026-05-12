@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Navbar from "./components/navbar";
 import HeroSection from "./components/hero";
 import Footer from "./components/footer";
+import Work from "./components/work";
 
 export type Language = "en" | "fr";
 
@@ -19,6 +20,7 @@ export default function Home() {
     <main className="bg-black text-white">
       <Navbar lang={lang} setLang={setLang} />
        <HeroSection lang={lang} />
+       <Work lang={lang} />
         <Footer lang={lang} />
 
     </main>
