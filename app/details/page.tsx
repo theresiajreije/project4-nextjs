@@ -85,7 +85,7 @@ export default function DetailsPage() {
                         </div>
                     </div>
 
-                    {/* FIRST IMAGE */}
+                  
                     <div className="mt-16 overflow-hidden lg:-ml-[115px]">
                         <img
                             src="/images/work1.jpg"
@@ -94,7 +94,6 @@ export default function DetailsPage() {
                         />
                     </div>
 
-                    {/* TEXT SECTION */}
                     <div className="mt-20">
                         <h2 className="max-w-[1150px] text-[24px] font-[700] leading-[34px] text-cyan-500 md:text-[30px] md:leading-[42px]">
                             How can we create a futuristic digital experience that combines
@@ -111,7 +110,7 @@ export default function DetailsPage() {
                             next generation of innovation.
                         </p>
 
-                        {/* SECOND IMAGE */}
+                     
                         <div className="mt-16 overflow-hidden lg:-ml-[115px]">
                             <img
                                 src="/images/work1.jpg"
@@ -121,7 +120,6 @@ export default function DetailsPage() {
                         </div>
                     </div>
 
-                    {/* POSTERS */}
                     <div className="mt-20 lg:-ml-[115px]">
                         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
 
@@ -145,6 +143,13 @@ export default function DetailsPage() {
 
                         </div>
                     </div>
+                    <div className="mt-16 overflow-hidden lg:-ml-[115px]">
+                            <img
+                                src="/images/work1.jpg"
+                                alt="Future Intelligence"
+                                className="w-full object-cover"
+                            />
+                        </div>
 
                 </div>
             </section>
