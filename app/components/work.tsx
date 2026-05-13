@@ -19,6 +19,7 @@ type Project = {
 export default function Work({ lang }: WorkGridProps) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     async function fetchProjects() {
@@ -39,38 +40,80 @@ export default function Work({ lang }: WorkGridProps) {
     fetchProjects();
   }, []);
 
+  const filteredProjects = projects.filter((project) => {
+    const searchValue = search.toLowerCase();
+
+    return (
+      project.title.toLowerCase().includes(searchValue) ||
+      (project.description || "").toLowerCase().includes(searchValue)
+    );
+  });
+
   return (
     <section id="work" className="bg-black py-14 sm:py-18 md:py-20 lg:py-24">
       <div className="mx-auto w-full max-w-[1200px] px-5 sm:px-8 md:px-10 lg:px-12">
+        <div className="mb-10">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder={
+                lang === "fr"
+                  ? "Rechercher des projets..."
+                  : "Search projects..."
+              }
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full rounded-md border border-white/20 bg-transparent px-5 py-4 pr-14 text-white outline-none placeholder:text-white/50 focus:border-cyan-400"
+            />
+
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch("")}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 transition hover:text-white"
+                aria-label="Clear search"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+        </div>
+
         {loading ? (
           <p className="text-center text-white">Loading projects...</p>
         ) : (
           <div className="grid grid-cols-1 gap-y-12 sm:gap-y-16 lg:grid-cols-2 lg:gap-x-10 lg:gap-y-20">
-            {projects.map((project) => (
-              <Link
-                key={project.id}
-                href={`/details/${project.alias}`}
-                className="group block"
-              >
-                <div>
-                  <div className="h-[220px] overflow-hidden bg-gray-800 sm:h-[300px] md:h-[360px] lg:h-[330px] xl:h-[380px]">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                    />
+            {filteredProjects.length > 0 ? (
+              filteredProjects.map((project) => (
+                <Link
+                  key={project.id}
+                  href={`/details/${project.alias}`}
+                  className="group block"
+                >
+                  <div>
+                    <div className="h-[220px] overflow-hidden bg-gray-800 sm:h-[300px] md:h-[360px] lg:h-[330px] xl:h-[380px]">
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                      />
+                    </div>
+
+                    <h3 className="mt-4 text-[20px] font-bold text-white sm:text-[22px] md:text-[24px]">
+                      {project.title}
+                    </h3>
+
+                    <p className="mt-2 max-w-[520px] text-[14px] leading-[22px] text-white/80 sm:mt-3 sm:text-[15px] sm:leading-[24px]">
+                      {project.description || "Hanzo Films project"}
+                    </p>
                   </div>
-
-                  <h3 className="mt-4 text-[20px] font-bold text-white sm:text-[22px] md:text-[24px]">
-                    {project.title}
-                  </h3>
-
-                  <p className="mt-2 max-w-[520px] text-[14px] leading-[22px] text-white/80 sm:mt-3 sm:text-[15px] sm:leading-[24px]">
-                    {project.description || "Hanzo Films project"}
-                  </p>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))
+            ) : (
+              <p className="col-span-full text-center text-white/70">
+                {lang === "fr" ? "Aucun projet trouvé." : "No projects found."}
+              </p>
+            )}
           </div>
         )}
 
