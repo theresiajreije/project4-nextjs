@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import Navbar from "@/app/components/navbar";
 import Footer from "@/app/components/footer";
 
@@ -37,12 +38,34 @@ export default function AboutPage() {
   ];
 
   const [selectedService, setSelectedService] = useState<typeof services[0] | null>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+
+      const progress = (scrollTop / docHeight) * 100;
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <>
       <Navbar />
 
       <main className="bg-black text-white">
+        <div className="fixed left-8 top-1/2 z-50 h-[170px] w-[8px] -translate-y-1/2 rounded-full bg-[#d9d9d9]">
+          <div
+            className="w-full rounded-full bg-red-500 transition-all duration-200"
+            style={{ height: `${Math.min(scrollProgress, 100)}%` }}
+          ></div>
+        </div>
         <section className="relative min-h-[720px] overflow-hidden bg-black px-5 pt-20 pb-24">
           <div className="relative mx-auto flex max-w-[1400px] items-center justify-center pt-10">
             <div className="absolute left-[40px] top-[-40px] h-[500px] w-[500px] rounded-full border-[6px] border-cyan-500 opacity-90"></div>
@@ -87,7 +110,7 @@ export default function AboutPage() {
 
         <section className="bg-black px-5 pt-7 pb-20 text-white">
           <div className="mx-auto max-w-[1100px] text-center">
-           <h2 className="mx-auto text-[38px] font-thin leading-[0.95] tracking-[-1px] text-white md:text-[56px] lg:text-[74px]">
+            <h2 className="mx-auto text-[38px] font-thin leading-[0.95] tracking-[-1px] text-white md:text-[56px] lg:text-[74px]">
               creativity drives
               <br />
               everything we build.
@@ -103,7 +126,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="bg-black px-5 py-20 text-white">
+        <section className="bg-black px-4 py-20 text-white">
           <div className="mx-auto max-w-[1200px] text-center">
             <div className="flex flex-col items-center gap-10">
               {services.map((item, index) => {
@@ -116,17 +139,19 @@ export default function AboutPage() {
                     onClick={() => setSelectedService(item)}
                     className="group flex items-start gap-5 text-center"
                   >
-                    <span className="mt-4 text-[22px] font-bold text-red-500">
+                    <span
+                      className={`mt-4 text-[22px] font-bold transition-colors duration-300 ${isActive ? "text-red-500" : "text-blue-500"
+                        } group-hover:text-red-500`}
+                    >
                       {String(index + 1).padStart(2, "0")}
                     </span>
 
                     <div>
                       <h2
-                        className={`text-[42px] font-black uppercase leading-none transition duration-300 md:text-[70px] lg:text-[110px] ${
-                          isActive
-                            ? "text-white"
-                            : "text-transparent group-hover:text-white"
-                        }`}
+                        className={`text-[42px] font-black uppercase leading-none transition duration-300 md:text-[70px] lg:text-[110px] ${isActive
+                          ? "text-white"
+                          : "text-transparent group-hover:text-white"
+                          }`}
                         style={{
                           WebkitTextStroke: "1.5px white",
                         }}
