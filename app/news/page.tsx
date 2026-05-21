@@ -11,7 +11,6 @@ import "swiper/css";
 export default function NewsPage() {
   const [news, setNews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentSlide, setCurrentSlide] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [slidesPerView, setSlidesPerView] = useState(1);
 
@@ -27,7 +26,7 @@ export default function NewsPage() {
         const sections = data.data.sections;
 
         const newsItems = sections.filter(
-          (item: any) => item.section_type === "image"
+          (item: any) => item.section_type === "image",
         );
 
         setNews(newsItems);
@@ -47,7 +46,7 @@ export default function NewsPage() {
         initSlideUpAnimation(sectionRef.current);
       }
     },
-    { scope: sectionRef, dependencies: [news, loading] }
+    { scope: sectionRef, dependencies: [news, loading] },
   );
 
   const totalPages = Math.ceil(news.length / slidesPerView);
@@ -68,7 +67,7 @@ export default function NewsPage() {
                 {Array.from({ length: 3 }).map((_, index) => (
                   <div
                     key={index}
-                    className="min-h-[620px] overflow-hidden rounded bg-[#111]"
+                    className="h-[620px] overflow-hidden rounded bg-[#111]"
                   >
                     <div className="h-[250px] animate-pulse bg-white/10"></div>
 
@@ -86,30 +85,45 @@ export default function NewsPage() {
             </>
           ) : (
             <>
-              <h1 className="slideup mb-12 text-center text-3xl">LATEST NEWS</h1>
+              <h1 className="slideup mb-12 text-center text-3xl">
+                LATEST NEWS
+              </h1>
 
               <Swiper
                 spaceBetween={30}
                 slidesPerView={1}
                 onSwiper={(swiper) => {
                   swiperRef.current = swiper;
+
                   const value = swiper.params.slidesPerView;
-                  setSlidesPerView(typeof value === "number" ? value : 1);
-                  setCurrentSlide(swiper.realIndex + 1);
+
+                  setSlidesPerView(
+                    typeof value === "number" ? value : 1,
+                  );
+
                   setCurrentPage(1);
                 }}
                 onBreakpoint={(swiper) => {
                   const value = swiper.params.slidesPerView;
-                  const currentValue = typeof value === "number" ? value : 1;
+
+                  const currentValue =
+                    typeof value === "number" ? value : 1;
+
                   setSlidesPerView(currentValue);
-                  setCurrentPage(Math.floor(swiper.realIndex / currentValue) + 1);
+
+                  setCurrentPage(
+                    Math.floor(swiper.realIndex / currentValue) + 1,
+                  );
                 }}
                 onSlideChange={(swiper) => {
-                  setCurrentSlide(swiper.realIndex + 1);
-
                   const value = swiper.params.slidesPerView;
-                  const currentValue = typeof value === "number" ? value : 1;
-                  setCurrentPage(Math.floor(swiper.realIndex / currentValue) + 1);
+
+                  const currentValue =
+                    typeof value === "number" ? value : 1;
+
+                  setCurrentPage(
+                    Math.floor(swiper.realIndex / currentValue) + 1,
+                  );
                 }}
                 breakpoints={{
                   768: {
@@ -122,16 +136,19 @@ export default function NewsPage() {
               >
                 {news.map((item: any) => (
                   <SwiperSlide key={item.id} className="h-auto">
-                    <div className="flex h-full min-h-[620px] flex-col overflow-hidden rounded bg-[#111]">
-                      <img
-                        src={item.details.image}
-                        alt={item.title}
-                        className="h-[250px] w-full object-cover"
-                      />
+                    <div className="group flex h-[620px] flex-col overflow-hidden rounded bg-[#111] transition-all duration-500 hover:-translate-y-3 hover:opacity-90 hover:shadow-2xl hover:shadow-cyan-500/20">
+
+                      <div className="h-[250px] w-full overflow-hidden">
+                        <img
+                          src={item.details.image}
+                          alt={item.title}
+                          className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                        />
+                      </div>
 
                       <div className="flex flex-1 flex-col justify-between p-6">
                         <div>
-                          <h2 className="slideup text-[18px] font-semibold leading-9">
+                          <h2 className="slideup text-[18px] font-semibold leading-9 transition-colors duration-300 group-hover:text-cyan-400">
                             {item.title}
                           </h2>
 
@@ -141,7 +158,7 @@ export default function NewsPage() {
 
                           {item.details.text && (
                             <div
-                              className="mt-5 text-sm leading-7 text-gray-300"
+                              className="mt-5 line-clamp-8 text-sm leading-7 text-gray-300"
                               dangerouslySetInnerHTML={{
                                 __html: item.details.text,
                               }}
@@ -153,7 +170,7 @@ export default function NewsPage() {
                           href={item.details.cta_link}
                           target="_blank"
                           rel="noreferrer"
-                          className="slideup mt-6 inline-block text-cyan-400"
+                          className="slideup mt-6 inline-block w-fit text-cyan-400 transition-all duration-300 hover:translate-x-2 hover:text-white"
                         >
                           Read more →
                         </a>
@@ -166,8 +183,9 @@ export default function NewsPage() {
               {news.length > 0 && (
                 <div className="mx-auto mt-12 flex max-w-[700px] items-center justify-between gap-6">
                   <button
+                    type="button"
                     onClick={() => swiperRef.current?.slidePrev()}
-                    className="text-[42px] leading-none text-cyan-400"
+                    className="cursor-pointer text-[42px] leading-none text-cyan-400 transition duration-300 hover:text-white"
                   >
                     ‹
                   </button>
@@ -192,8 +210,9 @@ export default function NewsPage() {
                   </div>
 
                   <button
+                    type="button"
                     onClick={() => swiperRef.current?.slideNext()}
-                    className="text-[42px] leading-none text-cyan-400"
+                    className="cursor-pointer text-[42px] leading-none text-cyan-400 transition duration-300 hover:text-white"
                   >
                     ›
                   </button>

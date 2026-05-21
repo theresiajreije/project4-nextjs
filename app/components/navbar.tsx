@@ -15,22 +15,24 @@ export default function Navbar({ lang = "en", setLang }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const links =
-    lang === "fr"
-      ? [
-          { label: "à propos", href: "/about" },
-          { label: "nos travaux", href: "/#work" },
-          { label: "nos clients", href: "/#clients" },
-          { label: "notre équipe", href: "/#team" },
-          { label: "contactez-nous", href: "/contact" },
-        ]
-      : [
-          { label: "about us", href: "/about" },
-          { label: "our work", href: "/#work" },
-          { label: "our clients", href: "/#clients" },
-          { label: "our team", href: "/#team" },
-          { label: "contact us", href: "/contact" },
-        ];
-
+  lang === "fr"
+    ? [
+        { label: "à propos", href: "/about" },
+        { label: "nos travaux", href: "/#work" },
+        { label: "actualités", href: "/news" }, // add this
+        { label: "nos clients", href: "/#clients" },
+        { label: "notre équipe", href: "/#team" },
+        { label: "contactez-nous", href: "/contact" },
+      ]
+    : [
+        { label: "about us", href: "/about" },
+        { label: "our work", href: "/#work" },
+        { label: "news", href: "/news" }, // add this
+        { label: "our clients", href: "/#clients" },
+        { label: "our team", href: "/#team" },
+        { label: "contact us", href: "/contact" },
+      ];
+      
   return (
     <header className="w-full bg-black">
       <div className="container mx-auto flex items-start justify-between px-6 pt-6 md:px-8 lg:px-10 xl:px-16">
