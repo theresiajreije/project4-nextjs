@@ -35,10 +35,12 @@ export default function Work({ lang }: WorkGridProps) {
       } finally {
         setLoading(false);
       }
+
     }
 
     fetchProjects();
   }, []);
+  
 
   const filteredProjects = projects.filter((project) => {
     const searchValue = search.toLowerCase();
