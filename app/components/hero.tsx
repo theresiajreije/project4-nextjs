@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import type { Language } from "../page";
 
-gsap.registerPlugin(useGSAP);
+
 
 type HeroSectionProps = {
   lang: Language;
@@ -29,6 +29,7 @@ export default function HeroSection({ lang }: HeroSectionProps) {
       if (titleRef.current) {
         titleRef.current.textContent = "";
       }
+
 
       const tl = gsap.timeline();
 

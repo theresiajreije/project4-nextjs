@@ -41,7 +41,7 @@ export default function Navbar({ lang = "en", setLang }: NavbarProps) {
         </div>
 
         <div className="hidden items-center gap-6 pt-6 min-[769px]:flex lg:gap-8 xl:gap-10">
-          <nav className="flex items-center gap-4 lg:gap-6 xl:gap-10">
+          <nav className="flex items-center gap-3 lg:gap-4 xl:gap-6">
             {links.map((link) => (
               <Link
                 key={link.label}
