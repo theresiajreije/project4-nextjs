@@ -19,7 +19,8 @@ export default function Navbar({ lang = "en", setLang }: NavbarProps) {
     ? [
         { label: "à propos", href: "/about" },
         { label: "nos travaux", href: "/#work" },
-        { label: "actualités", href: "/news" }, // add this
+        { label: "actualités", href: "/news" },
+        { label: "médias", href: "/media" },
         { label: "nos clients", href: "/#clients" },
         { label: "notre équipe", href: "/#team" },
         { label: "contactez-nous", href: "/contact" },
@@ -27,7 +28,8 @@ export default function Navbar({ lang = "en", setLang }: NavbarProps) {
     : [
         { label: "about us", href: "/about" },
         { label: "our work", href: "/#work" },
-        { label: "news", href: "/news" }, // add this
+        { label: "news", href: "/news" },
+        { label: "media", href: "/media" },
         { label: "our clients", href: "/#clients" },
         { label: "our team", href: "/#team" },
         { label: "contact us", href: "/contact" },
