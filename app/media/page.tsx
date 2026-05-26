@@ -90,6 +90,20 @@ const projectSlides = [
     video:
       "https://cdn.coverr.co/videos/coverr-modern-office-workspace-1567609644657?download=1080p",
   },
+  {
+    id: 5,
+    image:
+      "https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=1200&auto=format&fit=crop",
+    video:
+      "https://cdn.coverr.co/videos/coverr-man-typing-on-a-keyboard-2810/1080p.mp4",
+  },
+  {
+    id: 6,
+    image:
+      "https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1200&auto=format&fit=crop",
+    video:
+      "https://cdn.coverr.co/videos/coverr-working-on-laptop-1567625329717?download=1080p",
+  },
 ];
 
 function formatNumber(value: number) {
@@ -112,7 +126,7 @@ function Pagination({
       <button
         type="button"
         onClick={onPrev}
-        className="w-[28px] text-[36px] leading-none text-[#18d1d0]"
+        className="w-[28px] cursor-pointer text-[36px] leading-none text-[#18d1d0] transition hover:scale-110"
       >
         ‹
       </button>
@@ -135,7 +149,7 @@ function Pagination({
       <button
         type="button"
         onClick={onNext}
-        className="w-[28px] text-[36px] leading-none text-[#18d1d0]"
+        className="w-[28px] cursor-pointer text-[36px] leading-none text-[#18d1d0] transition hover:scale-110"
       >
         ›
       </button>
@@ -144,7 +158,9 @@ function Pagination({
 }
 
 export default function MediaPage() {
-  const [activeTab, setActiveTab] = useState<"reviews" | "projects">("reviews");
+  const [activeTab, setActiveTab] = useState<"reviews" | "projects">(
+    "reviews"
+  );
   const [activeReview, setActiveReview] = useState(3);
   const [activeProject, setActiveProject] = useState(2);
   const [playingProject, setPlayingProject] = useState<number | null>(null);
@@ -175,16 +191,16 @@ export default function MediaPage() {
     <main className="bg-black text-white">
       <Navbar />
 
-      <section className="bg-[#dbe5e9] px-6 py-16 md:px-10">
+      <section className="overflow-hidden bg-[#dbe5e9] px-6 py-16 md:px-10">
         <div className="mx-auto max-w-[1650px]">
           <div className="mx-auto mb-16 flex w-full max-w-[820px] overflow-hidden rounded-[14px]">
             <button
               type="button"
               onClick={() => setActiveTab("reviews")}
-              className={`flex flex-1 items-center justify-between px-7 py-5 text-left text-[19px] font-semibold leading-7 ${
+              className={`flex flex-1 cursor-pointer items-center justify-between px-7 py-5 text-left text-[19px] font-semibold leading-7 transition ${
                 activeTab === "reviews"
                   ? "bg-[#1bcfcd] text-white"
-                  : "bg-[#07546d] text-white"
+                  : "bg-[#07546d] text-white hover:bg-[#0a6380]"
               }`}
             >
               <span>What clients say about our work</span>
@@ -194,10 +210,10 @@ export default function MediaPage() {
             <button
               type="button"
               onClick={() => setActiveTab("projects")}
-              className={`flex flex-1 items-center justify-between px-7 py-5 text-left text-[19px] font-semibold leading-7 ${
+              className={`flex flex-1 cursor-pointer items-center justify-between px-7 py-5 text-left text-[19px] font-semibold leading-7 transition ${
                 activeTab === "projects"
                   ? "bg-[#1bcfcd] text-white"
-                  : "bg-[#07546d] text-white"
+                  : "bg-[#07546d] text-white hover:bg-[#0a6380]"
               }`}
             >
               <span>Creative moments from our projects</span>
@@ -242,14 +258,14 @@ export default function MediaPage() {
                     return (
                       <SwiperSlide
                         key={item.id}
-                        className="!flex !h-auto items-center justify-center"
+                        className="!flex !h-auto cursor-pointer items-center justify-center"
                       >
-                        <div className="flex h-[485px] w-full items-center justify-center">
+                        <div className="flex h-[485px] w-full cursor-pointer items-center justify-center">
                           <div
-                            className={`flex h-[380px] w-full max-w-[260px] flex-col justify-between rounded-[18px] px-6 py-8 transition-all duration-300 ease-out ${
+                            className={`flex w-full max-w-[260px] cursor-pointer flex-col justify-between rounded-[18px] px-6 py-8 transition-all duration-300 ease-out ${
                               isActive
                                 ? "h-[485px] max-w-[310px] bg-[#07546d] text-white"
-                                : "bg-[#f4f4f4] text-[#1b6f89]"
+                                : "h-[380px] bg-[#f4f4f4] text-[#1b6f89]"
                             }`}
                           >
                             <div>
@@ -295,8 +311,8 @@ export default function MediaPage() {
           )}
 
           {activeTab === "projects" && (
-            <div className="grid items-start gap-12 lg:grid-cols-[360px_minmax(0,1fr)]">
-              <div className="hidden lg:block">
+            <div className="relative">
+              <div className="pointer-events-none absolute left-5 top-20 hidden lg:block">
                 <h2 className="text-[76px] font-bold uppercase leading-[0.9] tracking-[-0.04em] text-[#c6d5db]">
                   Creative
                   <br />
@@ -308,14 +324,14 @@ export default function MediaPage() {
                 </h2>
               </div>
 
-              <div>
+              <div className="ml-[420px] min-w-0">
                 <div className="min-h-[620px]">
                   <Swiper
                     loop={true}
-                    centeredSlides={true}
+                    centeredSlides={false}
                     initialSlide={1}
-                    slidesPerView={1}
-                    spaceBetween={0}
+                    slidesPerView={1.3}
+                    spaceBetween={18}
                     speed={700}
                     watchSlidesProgress={true}
                     onSwiper={(swiper) => {
@@ -326,37 +342,58 @@ export default function MediaPage() {
                       setActiveProject(swiper.realIndex + 1);
                       setPlayingProject(null);
                     }}
+                    breakpoints={{
+                      768: {
+                        slidesPerView: 2.6,
+                        spaceBetween: 18,
+                        centeredSlides: true,
+                      },
+                      1200: {
+  slidesPerView: 4.1,
+  spaceBetween: 18,
+  centeredSlides: false,
+},
+                    }}
                   >
-                    {projectSlides.map((item) => {
+                    {projectSlides.map((item, index) => {
+                      const isActive = activeProject === index + 1;
                       const isPlaying = playingProject === item.id;
 
                       return (
                         <SwiperSlide
                           key={item.id}
-                          className="!flex !h-auto items-center justify-center"
+                          className="!flex !h-auto cursor-pointer items-center justify-center"
                         >
-                          <div className="flex h-[560px] w-full items-center justify-center">
-                            <div className="relative h-[560px] w-full max-w-[520px] overflow-hidden rounded-[20px]">
+                          <div className="flex h-[560px] w-full cursor-pointer items-center justify-center">
+                            <div
+                              className={`relative cursor-pointer overflow-hidden rounded-[20px] transition-all duration-300 ease-out ${
+                                isActive
+                                  ? "h-[560px] w-full max-w-[300px]"
+                                  : "h-[440px] w-full max-w-[240px]"
+                              }`}
+                            >
                               {isPlaying ? (
                                 <video
                                   src={item.video}
                                   controls
                                   autoPlay
-                                  className="h-full w-full object-cover"
+                                  className="h-full w-full cursor-pointer object-cover"
                                 />
                               ) : (
                                 <>
                                   <img
                                     src={item.image}
                                     alt={`Project ${item.id}`}
-                                    className="h-full w-full object-cover"
+                                    className="h-full w-full cursor-pointer object-cover"
                                   />
 
                                   <div className="pointer-events-none absolute bottom-4 right-4 z-20">
                                     <button
                                       type="button"
-                                      onClick={() => setPlayingProject(item.id)}
-                                      className="pointer-events-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#f0dfc4] text-[#0c4f70] shadow-md"
+                                      onClick={() =>
+                                        setPlayingProject(item.id)
+                                      }
+                                      className="pointer-events-auto flex h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-[#f0dfc4] text-[#0c4f70] shadow-md transition hover:scale-110"
                                     >
                                       <Play
                                         size={22}
@@ -378,7 +415,7 @@ export default function MediaPage() {
                 <div className="mt-8 flex h-[80px] items-center justify-center">
                   <button
                     type="button"
-                    className="rounded-[4px] bg-[#17bfe0] px-8 py-4 text-[15px] font-semibold uppercase tracking-[0.08em] text-white"
+                    className="cursor-pointer rounded-[4px] bg-[#17bfe0] px-8 py-4 text-[15px] font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-[#0aa6c4]"
                   >
                     View our projects
                   </button>
