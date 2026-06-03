@@ -1,8 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import type { Language } from "../page";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 type WorkGridProps = {
   lang: Language;
@@ -17,6 +22,8 @@ type Project = {
 };
 
 export default function Work({ lang }: WorkGridProps) {
+  const sectionRef = useRef<HTMLElement | null>(null);
+
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -35,12 +42,10 @@ export default function Work({ lang }: WorkGridProps) {
       } finally {
         setLoading(false);
       }
-
     }
 
     fetchProjects();
   }, []);
-  
 
   const filteredProjects = projects.filter((project) => {
     const searchValue = search.toLowerCase();
@@ -51,8 +56,59 @@ export default function Work({ lang }: WorkGridProps) {
     );
   });
 
+  useGSAP(
+    () => {
+      if (loading) return;
+
+      gsap.utils.toArray<HTMLElement>(".project-card").forEach((card) => {
+        gsap.fromTo(
+          card,
+          {
+            y: 80,
+            opacity: 0,
+          },
+          {
+            y: 0,
+            opacity: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 88%",
+              end: "top 55%",
+              scrub: 1,
+            },
+          }
+        );
+      });
+
+      gsap.fromTo(
+        ".bottom-text",
+        {
+          y: 60,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".bottom-text",
+            start: "top 90%",
+            end: "top 65%",
+            scrub: 1,
+          },
+        }
+      );
+    },
+    { scope: sectionRef, dependencies: [loading, filteredProjects.length] }
+  );
+
   return (
-    <section id="work" className="bg-black py-14 sm:py-18 md:py-20 lg:py-24">
+    <section
+      ref={sectionRef}
+      id="work"
+      className="bg-black py-14 sm:py-18 md:py-20 lg:py-24"
+    >
       <div className="mx-auto w-full max-w-[1200px] px-5 sm:px-8 md:px-10 lg:px-12">
         <div className="mb-10">
           <div className="relative">
@@ -90,7 +146,7 @@ export default function Work({ lang }: WorkGridProps) {
                 <Link
                   key={project.id}
                   href={`/details/${project.alias}`}
-                  className="group block"
+                  className="project-card group block"
                 >
                   <div>
                     <div className="h-[220px] overflow-hidden bg-gray-800 sm:h-[300px] md:h-[360px] lg:h-[330px] xl:h-[380px]">
@@ -119,33 +175,35 @@ export default function Work({ lang }: WorkGridProps) {
           </div>
         )}
 
-        <div className="mt-16 text-center sm:mt-20 lg:mt-24">
-          <div className="mb-5 flex justify-center gap-2 sm:mb-6 sm:gap-3">
-            <span className="h-1 w-[30px] rounded-full bg-cyan-400 sm:w-[40px]" />
-            <span className="h-1 w-[20px] rounded-full bg-red-400 sm:w-[25px]" />
-            <span className="h-1 w-[55px] rounded-full bg-cyan-400 sm:w-[80px]" />
-          </div>
+        {!loading && (
+          <div className="bottom-text mt-16 text-center sm:mt-20 lg:mt-24">
+            <div className="mb-5 flex justify-center gap-2 sm:mb-6 sm:gap-3">
+              <span className="h-1 w-[30px] rounded-full bg-cyan-400 sm:w-[40px]" />
+              <span className="h-1 w-[20px] rounded-full bg-red-400 sm:w-[25px]" />
+              <span className="h-1 w-[55px] rounded-full bg-cyan-400 sm:w-[80px]" />
+            </div>
 
-          <p className="text-[22px] leading-[34px] text-white sm:text-[26px] sm:leading-[40px] md:text-[30px] md:leading-[46px]">
-            {lang === "fr" ? (
-              <>
-                <span className="font-semibold text-red-400">
-                  nous aimerions
-                </span>{" "}
-                voir votre projet
-                <br className="hidden sm:block" />
-                <span className="sm:ml-2">ajouté ici</span>
-              </>
-            ) : (
-              <>
-                <span className="font-semibold text-red-400">we’d love</span>{" "}
-                to see your project
-                <br className="hidden sm:block" />
-                <span className="sm:ml-2">added here</span>
-              </>
-            )}
-          </p>
-        </div>
+            <p className="text-[22px] leading-[34px] text-white sm:text-[26px] sm:leading-[40px] md:text-[30px] md:leading-[46px]">
+              {lang === "fr" ? (
+                <>
+                  <span className="font-semibold text-red-400">
+                    nous aimerions
+                  </span>{" "}
+                  voir votre projet
+                  <br className="hidden sm:block" />
+                  <span className="sm:ml-2">ajouté ici</span>
+                </>
+              ) : (
+                <>
+                  <span className="font-semibold text-red-400">we’d love</span>{" "}
+                  to see your project
+                  <br className="hidden sm:block" />
+                  <span className="sm:ml-2">added here</span>
+                </>
+              )}
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );

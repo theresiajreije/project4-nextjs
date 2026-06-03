@@ -1,11 +1,17 @@
 "use client";
 
-
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import Navbar from "@/app/components/navbar";
 import Footer from "@/app/components/footer";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function AboutPage() {
+  const mainRef = useRef<HTMLElement | null>(null);
+
   const services = [
     {
       title: "branding",
@@ -37,7 +43,9 @@ export default function AboutPage() {
     },
   ];
 
-  const [selectedService, setSelectedService] = useState<typeof services[0] | null>(null);
+  const [selectedService, setSelectedService] =
+    useState<(typeof services)[0] | null>(null);
+
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
@@ -51,28 +59,110 @@ export default function AboutPage() {
     };
 
     window.addEventListener("scroll", handleScroll);
+    handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useGSAP(
+    () => {
+      gsap.from(".about-circle", {
+        scale: 0.5,
+        opacity: 0,
+        duration: 1.2,
+        ease: "power3.out",
+      });
+
+      gsap.from(".about-pattern", {
+        scale: 0.7,
+        opacity: 0,
+        duration: 1.2,
+        delay: 0.2,
+        ease: "power3.out",
+      });
+
+      gsap.from(".about-image", {
+        x: -80,
+        opacity: 0,
+        duration: 1.2,
+        delay: 0.3,
+        ease: "power3.out",
+      });
+
+      gsap.from(".about-title", {
+        y: 70,
+        opacity: 0,
+        duration: 1.2,
+        delay: 0.4,
+        ease: "power3.out",
+      });
+
+      gsap.from(".about-lines span", {
+        y: 20,
+        opacity: 0,
+        duration: 0.7,
+        delay: 0.7,
+        stagger: 0.15,
+        ease: "power2.out",
+      });
+
+      gsap.from(".about-text-section", {
+        y: 80,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".about-text-section",
+          start: "top 80%",
+        },
+      });
+
+      gsap.utils.toArray<HTMLElement>(".service-item").forEach((item) => {
+        gsap.from(item, {
+          y: 80,
+          opacity: 0,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: item,
+            start: "top 85%",
+          },
+        });
+      });
+
+      gsap.from(".team-section", {
+        y: 80,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".team-section",
+          start: "top 80%",
+        },
+      });
+    },
+    { scope: mainRef }
+  );
 
   return (
     <>
       <Navbar />
 
-      <main className="bg-black text-white">
+      <main ref={mainRef} className="bg-black text-white">
         <div className="fixed left-8 top-1/2 z-50 h-[170px] w-[8px] -translate-y-1/2 rounded-full bg-[#d9d9d9]">
           <div
             className="w-full rounded-full bg-red-500 transition-all duration-200"
             style={{ height: `${Math.min(scrollProgress, 100)}%` }}
           ></div>
         </div>
-        <section className="relative min-h-[720px] overflow-hidden bg-black px-5 pt-20 pb-24">
+
+        <section className="relative min-h-[720px] overflow-hidden bg-black px-5 pb-24 pt-20">
           <div className="relative mx-auto flex max-w-[1400px] items-center justify-center pt-10">
-            <div className="absolute left-[40px] top-[-40px] h-[500px] w-[500px] rounded-full border-[6px] border-cyan-500 opacity-90"></div>
+            <div className="about-circle absolute left-[40px] top-[-40px] h-[500px] w-[500px] rounded-full border-[6px] border-cyan-500 opacity-90"></div>
 
-            <div className="absolute left-[60px] top-[20px] h-[500px] w-[500px] rounded-full opacity-20 bg-[repeating-linear-gradient(45deg,#00bcd4_0px,#00bcd4_10px,transparent_10px,transparent_26px)]"></div>
+            <div className="about-pattern absolute left-[60px] top-[20px] h-[500px] w-[500px] rounded-full bg-[repeating-linear-gradient(45deg,#00bcd4_0px,#00bcd4_10px,transparent_10px,transparent_26px)] opacity-20"></div>
 
-            <div className="relative z-10 w-[700px] -mt-[120px]">
+            <div className="about-image relative z-10 -mt-[120px] w-[700px]">
               <img
                 src="/images/about-image.jpg"
                 alt="About"
@@ -81,7 +171,7 @@ export default function AboutPage() {
             </div>
 
             <div className="relative z-20 -ml-[360px] -mt-[70px] max-w-[950px] text-center">
-              <h1 className="text-[38px] font-black leading-[1.15] tracking-[-1px] text-white md:text-[48px] lg:text-[55px]">
+              <h1 className="about-title text-[38px] font-black leading-[1.15] tracking-[-1px] text-white md:text-[48px] lg:text-[55px]">
                 transforming ideas into
                 <br />
                 immersive digital
@@ -91,7 +181,8 @@ export default function AboutPage() {
                 audiences.
                 <span className="text-red-500">
                   {" "}
-                  from <span className="whitespace-nowrap">creative branding</span>
+                  from{" "}
+                  <span className="whitespace-nowrap">creative branding</span>
                   <br />
                   to innovative media
                   <br />
@@ -99,7 +190,7 @@ export default function AboutPage() {
                 </span>
               </h1>
 
-              <div className="mt-10 flex justify-center gap-5">
+              <div className="about-lines mt-10 flex justify-center gap-5">
                 <span className="h-1 w-12 rounded-full bg-cyan-400"></span>
                 <span className="h-1 w-6 rounded-full bg-red-400"></span>
                 <span className="h-1 w-14 rounded-full bg-cyan-400"></span>
@@ -108,7 +199,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="bg-black px-5 pt-7 pb-20 text-white">
+        <section className="about-text-section bg-black px-5 pb-20 pt-7 text-white">
           <div className="mx-auto max-w-[1100px] text-center">
             <h2 className="mx-auto text-[38px] font-thin leading-[0.95] tracking-[-1px] text-white md:text-[56px] lg:text-[74px]">
               creativity drives
@@ -116,7 +207,7 @@ export default function AboutPage() {
               everything we build.
             </h2>
 
-            <p className=" mx-auto mt-7 text-[18px] font-black leading-[1.15] text-white md:text-[28px] lg:text-[38px]">
+            <p className="mx-auto mt-7 text-[18px] font-black leading-[1.15] text-white md:text-[28px] lg:text-[38px]">
               delivering impactful digital experiences.
             </p>
 
@@ -137,21 +228,23 @@ export default function AboutPage() {
                     key={index}
                     type="button"
                     onClick={() => setSelectedService(item)}
-                    className="group flex items-start gap-5 text-center"
+                    className="service-item group flex items-start gap-5 text-center"
                   >
                     <span
-                      className={`mt-4 text-[22px] font-bold transition-colors duration-300 ${isActive ? "text-red-500" : "text-blue-500"
-                        } group-hover:text-red-500`}
+                      className={`mt-4 text-[22px] font-bold transition-colors duration-300 ${
+                        isActive ? "text-red-500" : "text-blue-500"
+                      } group-hover:text-red-500`}
                     >
                       {String(index + 1).padStart(2, "0")}
                     </span>
 
                     <div>
                       <h2
-                        className={`text-[42px] font-black uppercase leading-none transition duration-300 md:text-[70px] lg:text-[110px] ${isActive
-                          ? "text-white"
-                          : "text-transparent group-hover:text-white"
-                          }`}
+                        className={`text-[42px] font-black uppercase leading-none transition duration-300 md:text-[70px] lg:text-[110px] ${
+                          isActive
+                            ? "text-white"
+                            : "text-transparent group-hover:text-white"
+                        }`}
                         style={{
                           WebkitTextStroke: "1.5px white",
                         }}
@@ -172,11 +265,11 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="bg-black px-5 py-20 text-center text-white">
+        <section className="team-section bg-black px-5 py-20 text-center text-white">
           <div className="mx-auto max-w-[1000px]">
             <p className="text-[16px] leading-[1.7] text-white md:text-[22px]">
-              <span className="font-bold text-red-500">N.B.</span>{" "}
-              we are building innovative digital experiences
+              <span className="font-bold text-red-500">N.B.</span> we are
+              building innovative digital experiences
               <br />
               designed to transform ideas into reality.
             </p>
